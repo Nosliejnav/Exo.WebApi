@@ -2,7 +2,14 @@ using Exo.WebApi.Models;
 using Exo.WebApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
 using System;
+
+
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Exo.webApi.Controllers
 {
@@ -27,12 +34,54 @@ namespace Exo.webApi.Controllers
         }
 
         // post -> /api/usuarios
-        [HttpPost]
-        public IActionResult Cadastrar(Usuario usuario)
+        // [HttpPost]
+        // public IActionResult Cadastrar(Usuario usuario)
+        // {
+        //     _usuarioRepository.Cadastrar(usuario);
+        //     return StatusCode(201);
+        // }
+
+        // Novo código POST para auxiliar o método de Login.
+        public IActionResult Post(Usuario usuario)
         {
-            _usuarioRepository.Cadastrar(usuario);
-            return StatusCode(201);
+            Usuario usuarioBuscado = _usuarioRepository.Login(usuario.Email, usuario.Senha);
+            if (usuarioBuscado == null)
+            {
+                return NotFound("E-mail ou senha invalido!");
+            }
+
+            // Se o usuário for encontrado, segue a criação do token.
+
+            // Define os dados que serão fornecidos no token - Payload.
+            var claims = new[]
+            {
+                // Armazena na claim o e-mail usuário autenticado.
+                new Claim(JwtRegisteredClaimNames.Email, usuarioBuscado.Email),
+
+                // Armazena na claim o id do usuário autenticado.
+                new Claim(JwtRegisteredClaimNames.Jti, usuarioBuscado.Id.ToString()),
+            };
+
+            // Define a chave de acesso ao token.
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("exoapi_chave-autenticacao"));
+
+            // Define as credencias do token.
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            // Gera o token.
+            var token = new JwtSecurityToken(
+                issuer: "exoapi.webapi", // Emissor do token
+                audience: "exoapi.webapi", // Destinatário do token.
+                claims: claims, // Dados definidos acima.
+                expires: DateTime.Now.AddMinutes(30), // Tempo de expiração.
+                signingCredentials: creds // Credenciais do token.
+            );
+            // Retorno pk com o token.
+            return Ok(
+                new { token = new JwtSecurityTokenHandler().WriteToken(token) }
+            );
         }
+        // Fim do novo código POST para auxiliar o método de Login.
 
         // get -> /api/usuarios/{id}
         [HttpGet("{id}")] // Faz a busca pelo ID.
@@ -48,6 +97,7 @@ namespace Exo.webApi.Controllers
 
         // put -> /api/usuario/{id}
         // Atualizar
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Usuario usuario)
         {
@@ -56,6 +106,7 @@ namespace Exo.webApi.Controllers
         }
 
         // delete -> /api/usuarios/{id}
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
         {
