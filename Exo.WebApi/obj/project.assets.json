@@ -8563,11 +8563,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "K:\\DevProjetos\\ASP.NET\\Material-Aluno\\Exo.WebApi\\Exo.WebApi\\Exo.WebApi\\Exo.WebApi.csproj",
+      "projectUniqueName": "K:\\DevProjetos\\React\\Exo.WebApi\\Exo.WebApi\\Exo.WebApi.csproj",
       "projectName": "Exo.WebApi",
-      "projectPath": "K:\\DevProjetos\\ASP.NET\\Material-Aluno\\Exo.WebApi\\Exo.WebApi\\Exo.WebApi\\Exo.WebApi.csproj",
+      "projectPath": "K:\\DevProjetos\\React\\Exo.WebApi\\Exo.WebApi\\Exo.WebApi.csproj",
       "packagesPath": "C:\\Users\\Vanja\\.nuget\\packages\\",
-      "outputPath": "K:\\DevProjetos\\ASP.NET\\Material-Aluno\\Exo.WebApi\\Exo.WebApi\\Exo.WebApi\\obj\\",
+      "outputPath": "K:\\DevProjetos\\React\\Exo.WebApi\\Exo.WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Vanja\\AppData\\Roaming\\NuGet\\NuGet.Config",
