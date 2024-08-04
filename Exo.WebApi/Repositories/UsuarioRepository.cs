@@ -17,6 +17,7 @@ namespace Exo.WebApi.Repositories
         {
             return _context.Usuarios.FirstOrDefault(u => u.Email == email && u.Senha == senha);
         }
+
         public List<Usuario> Listar()
         {
             return _context.Usuarios.ToList();

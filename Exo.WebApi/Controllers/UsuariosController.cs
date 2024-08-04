@@ -3,7 +3,6 @@ using Exo.WebApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -44,7 +43,7 @@ namespace Exo.webApi.Controllers
             Usuario usuarioBuscado = _usuarioRepository.Login(usuario.Email, usuario.Senha);
             if (usuarioBuscado == null)
             {
-                return NotFound("E-mail ou senha invalido!");
+                return NotFound("E-mail ou senha inválidos!");
             }
 
             // Se o usuário for encontrado, segue a criação do token.
@@ -53,6 +52,7 @@ namespace Exo.webApi.Controllers
             var claims = new[]
             {
                 // Armazena na claim o e-mail usuário autenticado.
+                //new Claim(JwtRegisteredClaimNames.Email, usuarioBuscado.Email),
                 new Claim(JwtRegisteredClaimNames.Email, usuarioBuscado.Email),
 
                 // Armazena na claim o id do usuário autenticado.
@@ -60,7 +60,7 @@ namespace Exo.webApi.Controllers
             };
 
             // Define a chave de acesso ao token.
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("exoapi_chave-autenticacao"));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("exoapi-chave-autenticacao"));
 
             // Define as credencias do token.
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

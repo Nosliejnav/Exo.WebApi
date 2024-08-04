@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ExoContext, ExoContext>();
 builder.Services.AddControllers();
 
-///
 // Forma de autenticação.
 builder.Services.AddAuthentication(options =>
 {
@@ -37,7 +36,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 // Fim da Forma de autenticação.
-///
 
 builder.Services.AddTransient<ProjetoRepository, ProjetoRepository>();
 builder.Services.AddTransient<UsuarioRepository, UsuarioRepository>();
@@ -50,7 +48,7 @@ app.UseRouting();
 app.UseAuthentication();
 
 // Habilita a autorização
-app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
